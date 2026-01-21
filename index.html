@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ashuu 💞 Proposal</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;}
+
+/* GENERAL PAGE */
+.page{
+  position:absolute;inset:0;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.page.active{display:flex;}
+
+/* BUTTON */
+button{
+  padding:12px 28px;
+  border:none;border-radius:30px;
+  background:#ff4d6d;color:#fff;font-size:16px;
+  margin-top:25px;box-shadow:0 0 25px #ff4d6d;cursor:pointer;
+  transition:.3s;
+}
+button:hover{transform:scale(1.05);box-shadow:0 0 35px #ff4d6d;}
+
+/* HEARTS & SPARKLES */
+.heart, .sparkle{
+  position:absolute;
+  animation:float 6s linear infinite;
+  opacity:.7;
+}
+@keyframes float{
+  from{transform:translateY(100vh);opacity:0;}
+  to{transform:translateY(-10vh);opacity:1;}
+}
+
+/* PAGE 1 – BOW GAME */
+#gameArea{width:320px;height:420px;position:relative;margin-top:20px;}
+#heartTarget{font-size:90px;position:absolute;top:40px;left:115px;}
+#arrow{font-size:70px;position:absolute;bottom:20px;left:125px;touch-action:none;cursor:pointer;transition:transform .2s;}
+#titleHeart{font-size:70px;margin-bottom:15px;animation:fade 2s forwards;}
+@keyframes fade{from{opacity:0;transform:scale(.8)} to{opacity:1;transform:scale(1);}}
+
+.romantic{
+  font-size:24px;
+  padding:25px;
+  text-shadow:0 0 20px pink;
+  animation:fadeIn 2s forwards;
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:scale(.8)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* PAGE 10 – RING BOX */
+#ringBox{
+  width:200px;height:140px;
+  background:linear-gradient(45deg,#222,#555);
+  border-radius:20px;
+  transition:1s;
+  cursor:pointer;
+  perspective:600px;
+}
+#ringBox.open{transform:rotateX(50deg);}
+#ring{font-size:60px;display:none;animation:pop 1s forwards;}
+@keyframes pop{from{scale:0}to{scale:1}}
+#proposal{font-size:22px;color:#ffb6c1;margin-top:20px;}
+#finalLove{font-size:36px;color:#ff4d6d;margin-top:20px;text-shadow:0 0 20px #ff4d6d;display:none;}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="page active" id="p1" style="background:radial-gradient(#400,#000);">
+  <h1 id="titleHeart">Ashuu 💞</h1>
+  <p>Arrow ko drag karke dil hit karo 💘</p>
+  <button onclick="startGame()">Start Arrow Game & Effects</button>
+  <div id="gameArea" style="display:none;">
+    <div id="heartTarget">❤️</div>
+    <div id="arrow">🏹</div>
+  </div>
+</div>
+
+<script>
+let current=1,startY=0,power=0;
+const arrow=document.getElementById("arrow");
+const game=document.getElementById("gameArea");
+
+/* SPAWN HEARTS & SPARKLES */
+function spawnHearts(){
+  for(let i=0;i<20;i++){
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerText="💖";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=12+Math.random()*20+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+  }
+  for(let i=0;i<15;i++){
+    let s=document.createElement("div");
+    s.className="sparkle";
+    s.innerText="✨";
+    s.style.left=Math.random()*100+"vw";
+    s.style.fontSize=10+Math.random()*15+"px";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),5000);
+  }
+}
+
+/* START GAME */
+function startGame(){
+  game.style.display="block";
+  spawnHearts();
+}
+
+/* ARROW DRAG & RELEASE */
+arrow.addEventListener("touchstart",e=>{startY=e.touches[0].clientY;});
+arrow.addEventListener("touchmove",e=>{
+  let dy=startY-e.touches[0].clientY;
+  power=Math.min(160,Math.max(30,dy));
+  arrow.style.transform=`translateY(${-power/2}px)`;
+});
+arrow.addEventListener("touchend",()=>{
+  arrow.style.transform=`translateY(${-power}px)`;
+  spawnHearts();
+  setTimeout(nextPage,700);
+});
+
+/* PAGES 2–9 */
+const romanticLines=[
+"Ashuu tum meri zindagi ka sabse pyara khwab ho 💞",
+"Har pal tumhara khayal sukoon deta hai ✨",
+"Tumhari muskurahat meri kamzori hai 😍",
+"Meri har khushi tum se judi hai 💖",
+"Tum meri duniya ho 🌍",
+"Dil sirf tumhara naam leta hai ❤️",
+"Tum meri dua ho 💫",
+"Main har janam tumhein chahoon 💍"
+];
+for(let i=0;i<8;i++){
+document.write(`
+<div class="page" id="p${i+2}" style="background:linear-gradient(120deg,hsl(${i*40},70%,30%),#000);">
+  <div class="romantic" id="line${i}">${romanticLines[i]}</div>
+  <button onclick="nextPage()">Agla 💖</button>
+</div>
+`);
+}
+
+/* PAGE 10 – REALISTIC RING BOX */
+document.write(`
+<div class="page" id="p10" style="background:radial-gradient(#001,#000);">
+  <h2>Ashuu 💍</h2>
+  <div id="ringBox" onclick="openBox()"></div>
+  <div id="ring">💍</div>
+  <p id="proposal">Ashuu 💖 kya tum meri zindagi hamesha ke liye banogi?</p>
+  <p id="finalLove">I Love You Ashuu 💖</p>
+</div>
+`);
+
+/* PAGE SWITCH */
+function nextPage(){
+  document.getElementById("p"+current).classList.remove("active");
+  current++;
+  document.getElementById("p"+current).classList.add("active");
+  spawnHearts();
+}
+
+/* RING BOX OPEN */
+function openBox(){
+  document.getElementById("ringBox").classList.add("open");
+  document.getElementById("ring").style.display="block";
+  spawnHearts();
+  setTimeout(()=>document.getElementById("finalLove").style.display="block",800);
+}
+</script>
+</body>
+</html>
